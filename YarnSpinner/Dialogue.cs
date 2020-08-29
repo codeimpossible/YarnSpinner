@@ -175,8 +175,7 @@ namespace Yarn {
 
     /// <summary>Provides a mechanism for storing and retrieving instances
     /// of the <see cref="Value"/> class.</summary>
-    public interface VariableStorage {
-
+    public interface VariableStorage : IEnumerable<KeyValuePair<string, Yarn.Value>> {        
         /// <summary>
         /// Stores a <see cref="Value"/>.
         /// </summary>
@@ -260,6 +259,9 @@ namespace Yarn {
             Value val = new Yarn.Value(boolValue);
             SetValue(variableName, val);
         }
+        
+        /// <inheritdoc/>
+        public abstract IEnumerator<KeyValuePair<string, Yarn.Value>> GetEnumerator();
 
         /// <inheritdoc/>
         public abstract void SetValue(string variableName, Value value);
@@ -301,6 +303,15 @@ namespace Yarn {
         public override void Clear()
         {
             variables.Clear();
+        }
+        
+        /// <inheritdoc/>
+        public abstract IEnumerator<KeyValuePair<string, Yarn.Value>> GetEnumerator()
+        {
+            foreach(var variable in variables)
+            {
+                yield return variable;
+            }
         }
     }
 
